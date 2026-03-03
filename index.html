@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YourName — Portfolio</title>
+  <meta name="description" content="Developer portfolio — projects, skills, and AI tools." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    ::selection { background: #1a1a1a; color: #fcfaf7; }
+    body { background: #fcfaf7; color: #1a1a1a; font-family: 'Source Serif 4', Georgia, serif; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: #1a1a1a !important; }
+
+    /* --- Nav --- */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(252,250,247,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-logo { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; letter-spacing: -0.5px; cursor: pointer; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-link { font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.5px; cursor: pointer; color: #999; border-bottom: 1.5px solid transparent; padding-bottom: 2px; transition: all 0.3s ease; }
+    .nav-link:hover, .nav-link.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+
+    /* --- Pages --- */
+    .page { display: none; min-height: 100vh; padding-top: 100px; animation: fadeUp 0.5s ease forwards; }
+    .page.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* --- Shared --- */
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #b0a090; letter-spacing: 2px; margin-bottom: 16px; }
+    .section-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 42px; font-weight: 400; letter-spacing: -1px; margin-bottom: 48px; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .serif-display { font-family: 'DM Serif Display', Georgia, serif; }
+
+    /* --- Footer --- */
+    .footer { padding: 60px 40px 40px; border-top: 1px solid rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #aaa; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: #aaa; }
+
+    /* --- Home --- */
+    .home-content { padding: 80px 40px 120px; max-width: 800px; position: relative; }
+    .home-label { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #b0a090; margin-bottom: 20px; letter-spacing: 2px; }
+    .home-title { font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(42px, 6vw, 72px); font-weight: 400; line-height: 1.1; margin-bottom: 32px; letter-spacing: -1.5px; }
+    .home-title em { font-style: italic; }
+    .home-desc { font-size: 20px; line-height: 1.7; color: #555; max-width: 560px; margin-bottom: 48px; }
+    .btn { font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 14px 28px; cursor: pointer; letter-spacing: 0.5px; transition: all 0.25s ease; border: none; }
+    .btn-primary { background: #1a1a1a; color: #fcfaf7; }
+    .btn-primary:hover { background: #333; }
+    .btn-outline { background: transparent; color: #1a1a1a; border: 1.5px solid #1a1a1a; }
+    .btn-outline:hover { background: #1a1a1a; color: #fcfaf7; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(0,0,0,0.06); margin: 0 40px 80px; max-width: 720px; }
+    .stat { background: #fcfaf7; padding: 36px 28px; }
+    .stat-num { font-family: 'DM Serif Display', Georgia, serif; font-size: 36px; margin-bottom: 6px; }
+    .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #999; letter-spacing: 0.5px; }
+    .grid-dots { position: absolute; top: 40px; right: 20px; opacity: 0.08; }
+
+    /* --- About --- */
+    .about-content { padding: 60px 40px 120px; max-width: 720px; }
+    .photo-placeholder { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #e8e4de, #d4cec5); margin-bottom: 40px; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #aaa; }
+    .bio { font-size: 18px; line-height: 1.85; color: #444; }
+    .bio p { margin-bottom: 24px; }
+    .timeline-item { display: flex; gap: 32px; padding: 20px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+    .timeline-year { font-family: 'IBM Plex Mono', monospace; font-size: 14px; min-width: 60px; }
+    .timeline-text { font-size: 16px; color: #666; }
+
+    /* --- Projects --- */
+    .projects-content { padding: 60px 40px 120px; max-width: 840px; }
+    .project-list { display: grid; gap: 1px; background: rgba(0,0,0,0.06); }
+    .project-card { background: #fcfaf7; padding: 36px 32px; cursor: pointer; transition: background 0.3s ease; }
+    .project-card:hover { background: #f5f2ec; }
+    .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .project-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 24px; font-weight: 400; }
+    .project-year { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #bbb; }
+    .project-desc { font-size: 15px; line-height: 1.7; color: #777; margin-bottom: 16px; }
+    .tag { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 10px; background: rgba(0,0,0,0.04); color: #888; letter-spacing: 0.3px; display: inline-block; margin-right: 8px; margin-bottom: 4px; }
+
+    /* --- Skills --- */
+    .skills-content { padding: 60px 40px 120px; max-width: 840px; }
+    .skill-row { display: flex; gap: 40px; padding: 28px 0; border-top: 1px solid rgba(0,0,0,0.06); align-items: baseline; flex-wrap: wrap; }
+    .skill-category { font-family: 'IBM Plex Mono', monospace; font-size: 13px; min-width: 140px; letter-spacing: 0.3px; }
+    .skill-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+    .skill-pill { font-size: 15px; color: #666; padding: 6px 16px; border: 1px solid rgba(0,0,0,0.08); border-radius: 20px; transition: all 0.25s ease; cursor: default; }
+    .skill-pill:hover { background: #1a1a1a; color: #fcfaf7; border-color: #1a1a1a; }
+    .exp-item { padding: 28px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+    .exp-header { display: flex; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+    .exp-role { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; }
+    .exp-org { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #bbb; margin-left: 12px; }
+    .exp-period { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #ccc; }
+    .exp-detail { font-size: 15px; color: #888; line-height: 1.7; }
+
+    /* --- Tools --- */
+    .tools-content { padding: 60px 40px 120px; max-width: 840px; }
+    .tools-desc { font-size: 17px; line-height: 1.7; color: #888; margin-bottom: 56px; max-width: 560px; margin-top: -24px; }
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+    .tool-card { border: 1px solid rgba(0,0,0,0.07); padding: 32px 28px; cursor: pointer; transition: all 0.3s ease; }
+    .tool-card:hover { border-color: rgba(0,0,0,0.2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.04); }
+    .tool-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .tool-icon { font-size: 28px; }
+    .tool-status { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 3px 10px; border-radius: 12px; }
+    .status-live { background: #e8f5e9; color: #2e7d32; }
+    .status-beta { background: #fff3e0; color: #e65100; }
+    .status-wip { background: #fce4ec; color: #c62828; }
+    .tool-name { font-family: 'DM Serif Display', Georgia, serif; font-size: 20px; font-weight: 400; margin-bottom: 10px; }
+    .tool-desc { font-size: 14px; line-height: 1.7; color: #999; }
+    .tool-link { margin-top: 20px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #bbb; }
+
+    /* --- Responsive --- */
+    @media (max-width: 640px) {
+      .nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-link { font-size: 11px; }
+      .home-content, .about-content, .projects-content, .skills-content, .tools-content { padding-left: 20px; padding-right: 20px; }
+      .stats-grid { margin-left: 20px; margin-right: 20px; grid-template-columns: 1fr; }
+      .skill-row { flex-direction: column; gap: 12px; }
+      .footer { flex-direction: column; gap: 16px; padding: 40px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-logo" onclick="showPage('home')">YourName</div>
+    <div class="nav-links">
+      <span class="nav-link active" data-page="home" onclick="showPage('home')">Home</span>
+      <span class="nav-link" data-page="about" onclick="showPage('about')">About</span>
+      <span class="nav-link" data-page="projects" onclick="showPage('projects')">Projects</span>
+      <span class="nav-link" data-page="skills" onclick="showPage('skills')">Skills</span>
+      <span class="nav-link" data-page="tools" onclick="showPage('tools')">AI Tools</span>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- ==================== HOME ==================== -->
+    <div id="page-home" class="page active">
+      <div class="home-content">
+        <svg class="grid-dots" width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="4" cy="4" r="2" fill="#1a1a1a"/><circle cx="28" cy="4" r="2" fill="#1a1a1a"/><circle cx="52" cy="4" r="2" fill="#1a1a1a"/><circle cx="76" cy="4" r="2" fill="#1a1a1a"/><circle cx="100" cy="4" r="2" fill="#1a1a1a"/>
+          <circle cx="4" cy="28" r="2" fill="#1a1a1a"/><circle cx="28" cy="28" r="2" fill="#1a1a1a"/><circle cx="52" cy="28" r="2" fill="#1a1a1a"/><circle cx="76" cy="28" r="2" fill="#1a1a1a"/><circle cx="100" cy="28" r="2" fill="#1a1a1a"/>
+          <circle cx="4" cy="52" r="2" fill="#1a1a1a"/><circle cx="28" cy="52" r="2" fill="#1a1a1a"/><circle cx="52" cy="52" r="2" fill="#1a1a1a"/><circle cx="76" cy="52" r="2" fill="#1a1a1a"/><circle cx="100" cy="52" r="2" fill="#1a1a1a"/>
+          <circle cx="4" cy="76" r="2" fill="#1a1a1a"/><circle cx="28" cy="76" r="2" fill="#1a1a1a"/><circle cx="52" cy="76" r="2" fill="#1a1a1a"/><circle cx="76" cy="76" r="2" fill="#1a1a1a"/><circle cx="100" cy="76" r="2" fill="#1a1a1a"/>
+          <circle cx="4" cy="100" r="2" fill="#1a1a1a"/><circle cx="28" cy="100" r="2" fill="#1a1a1a"/><circle cx="52" cy="100" r="2" fill="#1a1a1a"/><circle cx="76" cy="100" r="2" fill="#1a1a1a"/><circle cx="100" cy="100" r="2" fill="#1a1a1a"/>
+        </svg>
+        <div class="home-label">PORTFOLIO</div>
+        <h1 class="home-title">Hi, I'm <br><em>YourName</em>.</h1>
+        <p class="home-desc">A developer &amp; tinkerer who builds thoughtful digital experiences and small AI-powered tools that solve real problems.</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="showPage('projects')">View Projects &rarr;</button>
+          <button class="btn btn-outline" onclick="showPage('tools')">AI Tools</button>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Projects shipped</div></div>
+        <div class="stat"><div class="stat-num">3+</div><div class="stat-label">AI tools built</div></div>
+        <div class="stat"><div class="stat-num">2+</div><div class="stat-label">Years learning</div></div>
+      </div>
+    </div>
+
+    <!-- ==================== ABOUT ==================== -->
+    <div id="page-about" class="page">
+      <div class="about-content">
+        <div class="section-label">01 &mdash; ABOUT</div>
+        <h2 class="section-title">A bit about me</h2>
+        <div class="photo-placeholder">Your photo</div>
+        <div class="bio">
+          <p>I'm a developer passionate about building at the intersection of technology and human experience. I enjoy creating software that feels intuitive and tools that make everyday tasks simpler.</p>
+          <p>My journey started with curiosity about how things work &mdash; and that curiosity has taken me through web development, machine learning experiments, and lately, building small AI-powered utilities that I (and others) actually use every day.</p>
+          <p>When I'm not coding, you'll find me reading about emerging tech, tinkering with new frameworks, or going on long walks to think through problems.</p>
+        </div>
+        <div style="margin-top:64px;">
+          <div class="section-label">TIMELINE</div>
+          <div class="timeline-item"><span class="timeline-year">2024</span><span class="timeline-text">Started exploring AI/ML engineering</span></div>
+          <div class="timeline-item"><span class="timeline-year">2023</span><span class="timeline-text">Built first production web app</span></div>
+          <div class="timeline-item"><span class="timeline-year">2022</span><span class="timeline-text">Began learning to code</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <div id="page-projects" class="page">
+      <div class="projects-content">
+        <div class="section-label">02 &mdash; PROJECTS</div>
+        <h2 class="section-title">Selected work</h2>
+        <div class="project-list">
+          <div class="project-card">
+            <div class="project-header">
+              <h3 class="project-title">Project Alpha</h3>
+              <span class="project-year">2025</span>
+            </div>
+            <p class="project-desc">A full-stack web app for managing personal finances with visual dashboards and smart categorization.</p>
+            <div><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span></div>
+          </div>
+          <div class="project-card">
+            <div class="project-header">
+              <h3 class="project-title">ML Image Classifier</h3>
+              <span class="project-year">2025</span>
+            </div>
+            <p class="project-desc">A convolutional neural network trained to classify plant species from photographs with 94% accuracy.</p>
+            <div><span class="tag">Python</span><span class="tag">TensorFlow</span><span class="tag">Flask</span></div>
+          </div>
+          <div class="project-card">
+            <div class="project-header">
+              <h3 class="project-title">Chat Interface</h3>
+              <span class="project-year">2024</span>
+            </div>
+            <p class="project-desc">A real-time messaging platform with end-to-end encryption and minimal, distraction-free design.</p>
+            <div><span class="tag">TypeScript</span><span class="tag">WebSocket</span><span class="tag">Redis</span></div>
+          </div>
+          <div class="project-card">
+            <div class="project-header">
+              <h3 class="project-title">Portfolio Site</h3>
+              <span class="project-year">2024</span>
+            </div>
+            <p class="project-desc">This website &mdash; designed and built from scratch with a focus on clean typography and smooth transitions.</p>
+            <div><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">GitHub Pages</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SKILLS ==================== -->
+    <div id="page-skills" class="page">
+      <div class="skills-content">
+        <div class="section-label">03 &mdash; SKILLS</div>
+        <h2 class="section-title">Skills &amp; experience</h2>
+
+        <div class="skill-row"><div class="skill-category">Languages</div><div class="skill-pills"><span class="skill-pill">JavaScript</span><span class="skill-pill">TypeScript</span><span class="skill-pill">Python</span><span class="skill-pill">SQL</span></div></div>
+        <div class="skill-row"><div class="skill-category">Frontend</div><div class="skill-pills"><span class="skill-pill">React</span><span class="skill-pill">Next.js</span><span class="skill-pill">Tailwind CSS</span><span class="skill-pill">HTML/CSS</span></div></div>
+        <div class="skill-row"><div class="skill-category">Backend &amp; Data</div><div class="skill-pills"><span class="skill-pill">Node.js</span><span class="skill-pill">Flask</span><span class="skill-pill">PostgreSQL</span><span class="skill-pill">REST APIs</span></div></div>
+        <div class="skill-row"><div class="skill-category">AI / ML</div><div class="skill-pills"><span class="skill-pill">TensorFlow</span><span class="skill-pill">PyTorch</span><span class="skill-pill">Scikit-learn</span><span class="skill-pill">LLM APIs</span></div></div>
+        <div class="skill-row"><div class="skill-category">Tools</div><div class="skill-pills"><span class="skill-pill">Git</span><span class="skill-pill">Docker</span><span class="skill-pill">VS Code</span><span class="skill-pill">Figma</span></div></div>
+
+        <div style="margin-top:64px;">
+          <div class="section-label">EXPERIENCE</div>
+          <div class="exp-item">
+            <div class="exp-header">
+              <div><span class="exp-role">Freelance Developer</span><span class="exp-org">@ Self-employed</span></div>
+              <span class="exp-period">2024 &ndash; Present</span>
+            </div>
+            <p class="exp-detail">Building web apps and AI tools for clients. Focus on clean code and thoughtful UX.</p>
+          </div>
+          <div class="exp-item">
+            <div class="exp-header">
+              <div><span class="exp-role">Junior Developer</span><span class="exp-org">@ Tech Startup</span></div>
+              <span class="exp-period">2023 &ndash; 2024</span>
+            </div>
+            <p class="exp-detail">Worked on frontend features and internal tooling. Shipped 12+ features in first year.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TOOLS ==================== -->
+    <div id="page-tools" class="page">
+      <div class="tools-content">
+        <div class="section-label">04 &mdash; AI TOOLS</div>
+        <h2 class="section-title">Small tools, big impact</h2>
+        <p class="tools-desc">Tiny AI-powered utilities I've built to scratch my own itch. Most are open-source &mdash; feel free to use them.</p>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-top"><span class="tool-icon">&#x1F4DD;</span><span class="tool-status status-live">Live</span></div>
+            <h3 class="tool-name">Summarizer</h3>
+            <p class="tool-desc">Paste any article and get a concise, structured summary. Powered by Claude API with custom prompting.</p>
+            <div class="tool-link">View on GitHub &rarr;</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-top"><span class="tool-icon">&#x1F4AC;</span><span class="tool-status status-live">Live</span></div>
+            <h3 class="tool-name">Commit Msg Writer</h3>
+            <p class="tool-desc">Generates meaningful git commit messages from your staged diffs. Integrates with your terminal workflow.</p>
+            <div class="tool-link">View on GitHub &rarr;</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-top"><span class="tool-icon">&#x1F3A8;</span><span class="tool-status status-beta">Beta</span></div>
+            <h3 class="tool-name">Color Palette Gen</h3>
+            <p class="tool-desc">Describe a mood or theme and get a harmonious 5-color palette with accessibility contrast checks.</p>
+            <div class="tool-link">View on GitHub &rarr;</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-top"><span class="tool-icon">&#x1F9E0;</span><span class="tool-status status-wip">WIP</span></div>
+            <h3 class="tool-name">Study Flashcards</h3>
+            <p class="tool-desc">Upload notes or a PDF and auto-generate spaced-repetition flashcards for efficient studying.</p>
+            <div class="tool-link">View on GitHub &rarr;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>&copy; 2026 YourName</span>
+    <div class="footer-links">
+      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+      <a href="mailto:you@email.com">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    function showPage(page) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      // Show target
+      const target = document.getElementById('page-' + page);
+      if (target) {
+        target.classList.remove('active');
+        // Force reflow for animation
+        void target.offsetWidth;
+        target.classList.add('active');
+      }
+      // Update nav
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.toggle('active', l.dataset.page === page);
+      });
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Update URL hash
+      history.pushState(null, '', page === 'home' ? '/' : '#' + page);
+    }
+
+    // Handle back/forward
+    window.addEventListener('popstate', () => {
+      const hash = location.hash.replace('#', '') || 'home';
+      showPage(hash);
+    });
+
+    // Handle initial hash
+    const initialHash = location.hash.replace('#', '');
+    if (initialHash) showPage(initialHash);
+  </script>
+
+</body>
+</html>
